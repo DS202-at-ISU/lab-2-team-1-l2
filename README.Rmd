@@ -37,8 +37,8 @@ ggplot(
   data=ames, 
   aes(x=log(get('Sale Price')))
 )+ 
-  geom_histogram()+
-  labs(x="Sale Price")
+  geom_histogram(binwidth=1)+
+  labs(x="Log-scale Sale Price")
 ```
 
 
