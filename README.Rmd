@@ -31,7 +31,34 @@ summary(ames)
 - The main variable we're focusing on presently is Sale Price.  
 
 ### Step 3 Result
+```{r}
 
+
+library(ggplot2)
+
+
+ggplot(
+
+
+  data=ames, 
+
+
+  aes(x=log(get('Sale Price')))
+
+
+)+ 
+
+
+  geom_histogram(binwidth=1)+
+
+
+  labs(x="Log-scale Sale Price")
+
+
+```
+
+
+- Running the histogram outside of log scale reveals very large outliers. There are also some very low numbers. The total range is from 0 to 20 million
 ### Step 4 Result
 
 -   Gwen's Results:
