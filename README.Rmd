@@ -70,7 +70,13 @@ library(ggplot2)
 df_clean <- drop_na(ames)
 ggplot(df_clean, aes(x=log(get('Sale Price')), y=Acres)) + 
   geom_point()
+
+ggplot(ames, aes(x=log(get('Sale Price')), y=Acres)) + 
+  geom_point()
 ```
+- Prices tend towards the same rough trends price wise, with larger lots tending to be more expensive, but not universally so.  Relatively few legitimate outliers occur, with most lots tending to be roughy the same price and area.  This is very reflective of the fact that most of the values fell into the same price range, with it being evident that they also all fall into the same rough acreage as well.  
+
+
 -   Zach's Results:
 
 -   Adrian's Results:
