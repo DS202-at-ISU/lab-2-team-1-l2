@@ -80,3 +80,13 @@ ggplot(ames, aes(x=log(get('Sale Price')), y=Acres)) +
 -   Zach's Results:
 
 -   Adrian's Results:
+```{r}
+ames2 <- subset(ames, YearBuilt>0)
+ggplot(
+  ames2,
+  aes(x=YearBuilt, y=log(get('Sale Price')))
+)+
+  geom_point()+
+  labs(y='Price')
+```
+This plot does not reveal any explanations for irregularities. It seems that sales price remains fairly constant over years, with the lesser variety in older homes likely accounting for the smaller amount built from that time.
