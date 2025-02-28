@@ -26,11 +26,12 @@ summary(ames)
 
 -   Some of the variables in the data include Parcel ID(Categorical), Address(categorical), Style(categorical), Sale data(categorical), Sale price(numerical), LotArea(sf)(numerical),FinishedBsmtArea (sf)(numerical),Bedrooms(numerical),acres(numerical),YearBulit(categorical),AC(categorical), andFireplace(categorical)
 
-
 ### Step 2 Result
-- The main variable we're focusing on presently is Sale Price.  
+
+-   The main variable we're focusing on presently is Sale Price.
 
 ### Step 3 Result
+
 ```{r}
 
 
@@ -57,13 +58,50 @@ ggplot(
 
 ```
 
-
-- Running the histogram outside of log scale reveals very large outliers. There are also some very low numbers. The total range is from 0 to 20 million
-### Step 4 Result
+-   Running the histogram outside of log scale reveals very large outliers. There are also some very low numbers. The total range is from 0 to 20 million \### Step 4 Result
 
 -   Gwen's Results:
 
+    ```{r}
+    # This varible holds the log of sale price
+    ames$LogSalePrice <- log(ames$`Sale Price`)
+
+    # This is a box plot of neighborhood vs the log sale price 
+    ggplot(ames, aes(x = Neighborhood, y = LogSalePrice)) +
+      geom_boxplot(outlier.colour = "red") +
+      labs(title = "Log Sale Price by Neighborhood", x = "Neighborhood", y = "Log(Sale Price)") +
+      theme_minimal() +
+      theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+
+    ```
+
+    ```{r}
+    # Find the top and bottom 5 neighborhoods
+    top_neighborhoods <- ames %>%
+      group_by(Neighborhood) %>%
+      summarise(MedianPrice = median(`Sale Price`, na.rm = TRUE)) %>%
+      arrange(desc(MedianPrice)) %>%
+      head(5)
+
+    bottom_neighborhoods <- ames %>%
+      group_by(Neighborhood) %>%
+      summarise(MedianPrice = median(`Sale Price`, na.rm = TRUE)) %>%
+      arrange(MedianPrice) %>%
+      head(5)
+
+    # Print the most and least expensive neighborhoods
+    top_neighborhoods
+    bottom_neighborhoods
+
+    ```
+
+    -   There is no range for the Neigborhood variable, since it is categorical. It appears that neighborhoods have an effect on Sale price. According to the box-plot, there are certain neighborhoods that have higher median sale prices. You would expect that nicer neighborhoods with luxury houses would have houses that are more expensive.
+
+    -   Outliers can be seen throughout the box plot and there seem to be quite a few in high-priced neighborhoods. Many neighborhoods show high variability indicating that houses in the same area can sell at a wide range of prices.
+
 -   Ben's Results:
+
 ```{r head, include=True}
 library(ggplot2)
 
@@ -74,12 +112,13 @@ ggplot(df_clean, aes(x=log(get('Sale Price')), y=Acres)) +
 ggplot(ames, aes(x=log(get('Sale Price')), y=Acres)) + 
   geom_point()
 ```
-- Prices tend towards the same rough trends price wise, with larger lots tending to be more expensive, but not universally so.  Relatively few legitimate outliers occur, with most lots tending to be roughy the same price and area.  This is very reflective of the fact that most of the values fell into the same price range, with it being evident that they also all fall into the same rough acreage as well.  
 
+-   Prices tend towards the same rough trends price wise, with larger lots tending to be more expensive, but not universally so. Relatively few legitimate outliers occur, with most lots tending to be roughy the same price and area. This is very reflective of the fact that most of the values fell into the same price range, with it being evident that they also all fall into the same rough acreage as well.
 
 -   Zach's Results:
 
 -   Adrian's Results:
+
 ```{r}
 ames2 <- subset(ames, YearBuilt>0)
 ggplot(
@@ -89,4 +128,5 @@ ggplot(
   geom_point()+
   labs(y='Price')
 ```
+
 This plot does not reveal any explanations for irregularities. It seems that sales price remains fairly constant over years, with the lesser variety in older homes likely accounting for the smaller amount built from that time.
