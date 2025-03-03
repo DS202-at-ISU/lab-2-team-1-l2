@@ -20,6 +20,8 @@ All submissions to the github repo will be automatically uploaded for grading on
 
 ```{r head, include=TRUE}
 library(classdata)
+library(tidyr)
+library(tidyverse)
 head(ames)
 summary(ames)
 ```
@@ -116,6 +118,13 @@ ggplot(ames, aes(x=log(get('Sale Price')), y=Acres)) +
 -   Prices tend towards the same rough trends price wise, with larger lots tending to be more expensive, but not universally so. Relatively few legitimate outliers occur, with most lots tending to be roughy the same price and area. This is very reflective of the fact that most of the values fell into the same price range, with it being evident that they also all fall into the same rough acreage as well.
 
 -   Zach's Results:
+```{r code, include=True}
+
+amesgreaterthan100000 <- subset(ames,get('Sale Price')>100000)
+ggplot(amesgreaterthan100000, aes(x=get('FinishedBsmtArea (sf)'),y=log(get('Sale Price')) )) + 
+  geom_point()
+```
+- I started by excluding houses where the sales price is below 100,000 dollars I did this because I figured that there were circumstances around those sales prices that would cause them to be problematic for data analysis. I also performed a log transform on the sales price variable because the trend in the untransformed data was non-linear There seems to be a moderately linear trend in this data. There is an outlier in the x-direction at 6500. It seems that sales prices generally increases as the amount of finished basement area increases.
 
 -   Adrian's Results:
 
