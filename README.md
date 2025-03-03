@@ -21,37 +21,50 @@ you are done with your submission.
 
 ``` r
 library(classdata)
+library(tidyr)
+```
+
+    ## Warning: package 'tidyr' was built under R version 4.4.3
+
+``` r
+library(tidyverse)
+```
+
+    ## Warning: package 'tidyverse' was built under R version 4.4.3
+
+    ## Warning: package 'readr' was built under R version 4.4.3
+
+    ## Warning: package 'forcats' was built under R version 4.4.3
+
+    ## Warning: package 'lubridate' was built under R version 4.4.3
+
+    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+    ## ✔ dplyr     1.1.4     ✔ purrr     1.0.4
+    ## ✔ forcats   1.0.0     ✔ readr     2.1.5
+    ## ✔ ggplot2   3.5.1     ✔ stringr   1.5.1
+    ## ✔ lubridate 1.9.4     ✔ tibble    3.2.1
+    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ✖ dplyr::filter() masks stats::filter()
+    ## ✖ dplyr::lag()    masks stats::lag()
+    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+
+``` r
 head(ames)
 ```
 
-    ##    Parcel ID                       Address             Style
-    ## 1 0903202160      1024 RIDGEWOOD AVE, AMES 1 1/2 Story Frame
-    ## 2 0907428215 4503 TWAIN CIR UNIT 105, AMES     1 Story Frame
-    ## 3 0909428070        2030 MCCARTHY RD, AMES     1 Story Frame
-    ## 4 0923203160         3404 EMERALD DR, AMES     1 Story Frame
-    ## 5 0520440010       4507 EVEREST  AVE, AMES              <NA>
-    ## 6 0907275030       4512 HEMINGWAY DR, AMES     2 Story Frame
-    ##                        Occupancy  Sale Date Sale Price Multi Sale YearBuilt
-    ## 1 Single-Family / Owner Occupied 2022-08-12     181900       <NA>      1940
-    ## 2                    Condominium 2022-08-04     127100       <NA>      2006
-    ## 3 Single-Family / Owner Occupied 2022-08-15          0       <NA>      1951
-    ## 4                      Townhouse 2022-08-09     245000       <NA>      1997
-    ## 5                           <NA> 2022-08-03     449664       <NA>        NA
-    ## 6 Single-Family / Owner Occupied 2022-08-16     368000       <NA>      1996
-    ##   Acres TotalLivingArea (sf) Bedrooms FinishedBsmtArea (sf) LotArea(sf)  AC
-    ## 1 0.109                 1030        2                    NA        4740 Yes
-    ## 2 0.027                  771        1                    NA        1181 Yes
-    ## 3 0.321                 1456        3                  1261       14000 Yes
-    ## 4 0.103                 1289        4                   890        4500 Yes
-    ## 5 0.287                   NA       NA                    NA       12493  No
-    ## 6 0.494                 2223        4                    NA       21533 Yes
-    ##   FirePlace              Neighborhood
-    ## 1       Yes       (28) Res: Brookside
-    ## 2        No    (55) Res: Dakota Ridge
-    ## 3        No        (32) Res: Crawford
-    ## 4        No        (31) Res: Mitchell
-    ## 5        No (19) Res: North Ridge Hei
-    ## 6       Yes   (37) Res: College Creek
+    ## # A tibble: 6 × 16
+    ##   `Parcel ID` Address      Style Occupancy `Sale Date` `Sale Price` `Multi Sale`
+    ##   <chr>       <chr>        <fct> <fct>     <date>             <dbl> <chr>       
+    ## 1 0903202160  1024 RIDGEW… 1 1/… Single-F… 2022-08-12        181900 <NA>        
+    ## 2 0907428215  4503 TWAIN … 1 St… Condomin… 2022-08-04        127100 <NA>        
+    ## 3 0909428070  2030 MCCART… 1 St… Single-F… 2022-08-15             0 <NA>        
+    ## 4 0923203160  3404 EMERAL… 1 St… Townhouse 2022-08-09        245000 <NA>        
+    ## 5 0520440010  4507 EVERES… <NA>  <NA>      2022-08-03        449664 <NA>        
+    ## 6 0907275030  4512 HEMING… 2 St… Single-F… 2022-08-16        368000 <NA>        
+    ## # ℹ 9 more variables: YearBuilt <dbl>, Acres <dbl>,
+    ## #   `TotalLivingArea (sf)` <dbl>, Bedrooms <dbl>,
+    ## #   `FinishedBsmtArea (sf)` <dbl>, `LotArea(sf)` <dbl>, AC <chr>,
+    ## #   FirePlace <chr>, Neighborhood <fct>
 
 ``` r
 summary(ames)
@@ -110,12 +123,173 @@ summary(ames)
 
 ### Step 3 Result
 
-### Step 4 Result
+``` r
+library(ggplot2)
+
+
+ggplot(
+
+
+  data=ames, 
+
+
+  aes(x=log(get('Sale Price')))
+
+
+)+ 
+
+
+  geom_histogram(binwidth=1)+
+
+
+  labs(x="Log-scale Sale Price")
+```
+
+    ## Warning: Removed 2206 rows containing non-finite outside the scale range
+    ## (`stat_bin()`).
+
+![](README_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
+
+- Running the histogram outside of log scale reveals very large
+  outliers. There are also some very low numbers. The total range is
+  from 0 to 20 million \### Step 4 Result
 
 - Gwen’s Results:
 
+  ``` r
+  # This varible holds the log of sale price
+  ames$LogSalePrice <- log(ames$`Sale Price`)
+
+  # This is a box plot of neighborhood vs the log sale price 
+  ggplot(ames, aes(x = Neighborhood, y = LogSalePrice)) +
+    geom_boxplot(outlier.colour = "red") +
+    labs(title = "Log Sale Price by Neighborhood", x = "Neighborhood", y = "Log(Sale Price)") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  ```
+
+      ## Warning: Removed 2206 rows containing non-finite outside the scale range
+      ## (`stat_boxplot()`).
+
+  ![](README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+
+  ``` r
+  # Find the top and bottom 5 neighborhoods
+  top_neighborhoods <- ames %>%
+    group_by(Neighborhood) %>%
+    summarise(MedianPrice = median(`Sale Price`, na.rm = TRUE)) %>%
+    arrange(desc(MedianPrice)) %>%
+    head(5)
+
+  bottom_neighborhoods <- ames %>%
+    group_by(Neighborhood) %>%
+    summarise(MedianPrice = median(`Sale Price`, na.rm = TRUE)) %>%
+    arrange(MedianPrice) %>%
+    head(5)
+
+  # Print the most and least expensive neighborhoods
+  top_neighborhoods
+  ```
+
+      ## # A tibble: 5 × 2
+      ##   Neighborhood              MedianPrice
+      ##   <fct>                           <dbl>
+      ## 1 (57) Res: Investor Owned     14200000
+      ## 2 (0) None                       525000
+      ## 3 (20) Res: Northridge           320000
+      ## 4 (50) Central City Condo        300000
+      ## 5 (51) University Influence      279000
+
+  ``` r
+  bottom_neighborhoods
+  ```
+
+      ## # A tibble: 5 × 2
+      ##   Neighborhood              MedianPrice
+      ##   <fct>                           <dbl>
+      ## 1 (14) Apts: North                    0
+      ## 2 (15) Apts: South                    0
+      ## 3 (17) Apts: Hospital and D           0
+      ## 4 (43) Res: Stone Brooke              0
+      ## 5 (6) C/I:Lincoln Way-Duff            0
+
+  - There is no range for the Neigborhood variable, since it is
+    categorical. It appears that neighborhoods have an effect on Sale
+    price. According to the box-plot, there are certain neighborhoods
+    that have higher median sale prices. You would expect that nicer
+    neighborhoods with luxury houses would have houses that are more
+    expensive.
+
+  - Outliers can be seen throughout the box plot and there seem to be
+    quite a few in high-priced neighborhoods. Many neighborhoods show
+    high variability indicating that houses in the same area can sell at
+    a wide range of prices.
+
 - Ben’s Results:
+
+``` r
+library(ggplot2)
+
+df_clean <- drop_na(ames)
+ggplot(df_clean, aes(x=log(get('Sale Price')), y=Acres)) + 
+  geom_point()
+```
+
+![](README_files/figure-gfm/head2-1.png)<!-- -->
+
+``` r
+ggplot(ames, aes(x=log(get('Sale Price')), y=Acres)) + 
+  geom_point()
+```
+
+    ## Warning: Removed 89 rows containing missing values or values outside the scale range
+    ## (`geom_point()`).
+
+![](README_files/figure-gfm/head2-2.png)<!-- -->
+
+- Prices tend towards the same rough trends price wise, with larger lots
+  tending to be more expensive, but not universally so. Relatively few
+  legitimate outliers occur, with most lots tending to be roughy the
+  same price and area. This is very reflective of the fact that most of
+  the values fell into the same price range, with it being evident that
+  they also all fall into the same rough acreage as well.
 
 - Zach’s Results:
 
+``` r
+amesgreaterthan100000 <- subset(ames,get('Sale Price')>100000)
+ggplot(amesgreaterthan100000, aes(x=get('FinishedBsmtArea (sf)'),y=log(get('Sale Price')) )) + 
+  geom_point()
+```
+
+    ## Warning: Removed 1615 rows containing missing values or values outside the scale range
+    ## (`geom_point()`).
+
+![](README_files/figure-gfm/code-1.png)<!-- --> - I started by excluding
+houses where the sales price is below 100,000 dollars I did this because
+I figured that there were circumstances around those sales prices that
+would cause them to be problematic for data analysis. I also performed a
+log transform on the sales price variable because the trend in the
+untransformed data was non-linear There seems to be a moderately linear
+trend in this data. There is an outlier in the x-direction at 6500. It
+seems that sales prices generally increases as the amount of finished
+basement area increases.
+
 - Adrian’s Results:
+
+``` r
+ames2 <- subset(ames, YearBuilt>0)
+ggplot(
+  ames2,
+  aes(x=YearBuilt, y=log(get('Sale Price')))
+)+
+  geom_point()+
+  labs(y='Price')
+```
+
+![](README_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+
+This plot does not reveal any explanations for irregularities. It seems
+that sales price remains fairly constant over years, with the lesser
+variety in older homes likely accounting for the smaller amount built
+from that time.

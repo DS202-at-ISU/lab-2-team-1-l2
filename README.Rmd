@@ -104,7 +104,7 @@ ggplot(
 
 -   Ben's Results:
 
-```{r head, include=True}
+```{r head2, include=TRUE}
 library(ggplot2)
 
 df_clean <- drop_na(ames)
@@ -118,7 +118,7 @@ ggplot(ames, aes(x=log(get('Sale Price')), y=Acres)) +
 -   Prices tend towards the same rough trends price wise, with larger lots tending to be more expensive, but not universally so. Relatively few legitimate outliers occur, with most lots tending to be roughy the same price and area. This is very reflective of the fact that most of the values fell into the same price range, with it being evident that they also all fall into the same rough acreage as well.
 
 -   Zach's Results:
-```{r code, include=True}
+```{r code, include=TRUE}
 
 amesgreaterthan100000 <- subset(ames,get('Sale Price')>100000)
 ggplot(amesgreaterthan100000, aes(x=get('FinishedBsmtArea (sf)'),y=log(get('Sale Price')) )) + 
